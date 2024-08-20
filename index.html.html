@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics & Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            color: white;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #333;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .section {
+            padding: 40px;
+        }
+        .section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        #education, #sell {
+            background-color: #eef;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+        input, textarea {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: 50%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .upload-area {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            margin: 20px;
+            background-color: #fafafa;
+        }
+        #component-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .component-item {
+            width: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+            position: relative;
+        }
+        .component-item img {
+            width: 100%;
+            height: auto;
+        }
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: darkred;
+        }
+        #text-toolbar {
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        #text-toolbar select, #text-toolbar button {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to Electronics & Projects</h1>
+    </header>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#education">Education</a>
+        <a href="#sell">Shop Components</a>
+    </nav>
+
+    <section id="home" class="section">
+        <h2>Welcome to Our Website</h2>
+        <p>Explore electronics and project designing with ease.</p>
+    </section>
+
+    <section id="education" class="section">
+        <h2>Documentation</h2>
+
+        <!-- Text formatting toolbar -->
+        <div id="text-toolbar">
+            <select id="font-family">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+            </select>
+
+            <select id="font-size">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+            </select>
+
+            <button id="bold-btn"><b>B</b></button>
+            <button id="italic-btn"><i>I</i></button>
+        </div>
+
+        <form id="upload-form">
+            <textarea id="editor" placeholder="Type your documentation here..." rows="10"></textarea>
+            <div class="upload-area">
+                <input type="file" id="image-upload" accept="image/*">
+                <p>Upload an image</p>
+            </div>
+            <button type="button" id="upload-button">Save</button>
+        </form>
+    </section>
+
+    <section id="sell" class="section">
+        <h2>Shop Components</h2>
+        <div id="component-list">
+            <!-- Uploaded images will appear here -->
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Electronics & Projects. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Text formatting logic
+        const editor = document.getElementById('editor');
+        const fontFamilySelect = document.getElementById('font-family');
+        const fontSizeSelect = document.getElementById('font-size');
+        const boldBtn = document.getElementById('bold-btn');
+        const italicBtn = document.getElementById('italic-btn');
+
+        fontFamilySelect.addEventListener('change', () => {
+            editor.style.fontFamily = fontFamilySelect.value;
+        });
+
+        fontSizeSelect.addEventListener('change', () => {
+            editor.style.fontSize = fontSizeSelect.value;
+        });
+
+        boldBtn.addEventListener('click', () => {
+            editor.style.fontWeight = editor.style.fontWeight === 'bold' ? 'normal' : 'bold';
+        });
+
+        italicBtn.addEventListener('click', () => {
+            editor.style.fontStyle = editor.style.fontStyle === 'italic' ? 'normal' : 'italic';
+        });
+
+        // Image upload and display logic
+        const imageUpload = document.getElementById('image-upload');
+        const uploadButton = document.getElementById('upload-button');
+        const componentList = document.getElementById('component-list');
+
+        uploadButton.addEventListener('click', () => {
+            const file = imageUpload.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const componentItem = document.createElement('div');
+                    componentItem.classList.add('component-item');
+                    componentItem.innerHTML = `
+                        <img src="${e.target.result}" alt="Component Image">
+                        <button class="delete-button">Delete</button>
+                    `;
+                    componentList.appendChild(componentItem);
+
+                    // Delete button logic
+                    const deleteButton = componentItem.querySelector('.delete-button');
+                    deleteButton.addEventListener('click', () => {
+                        componentItem.remove();
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please upload an image first.');
+            }
+        });
+    </script>
+
+</body>
+</html>
